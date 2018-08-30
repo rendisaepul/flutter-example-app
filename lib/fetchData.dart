@@ -44,9 +44,15 @@ class PhotoPage extends State<ParentPhotoPage> {
   // PhotoPage({Key key}) : super(key: key);
   int _counter = 0;
 
-  void incrementCounter() {
+  void _incrementCounter() {
     setState(() {
       _counter++;
+    });
+  }
+
+  void _decrementCounter() {
+    setState(() {
+      _counter--;
     });
   }
 
@@ -70,7 +76,8 @@ class PhotoPage extends State<ParentPhotoPage> {
               if (snapshot.hasData) {
                 return PhotoList(
                   photos: snapshot.data,
-                  increment: incrementCounter,
+                  increment: _incrementCounter,
+                  decrement: _decrementCounter,
                 );
               } else if (snapshot.hasError) {
                 print(snapshot.error);
@@ -87,8 +94,9 @@ class PhotoPage extends State<ParentPhotoPage> {
 class PhotoList extends StatelessWidget {
   final photos;
   final increment;
+  final decrement;
 
-  PhotoList({Key key, this.photos, this.increment}) : super(key: key);
+  PhotoList({Key key, this.photos, this.increment, this.decrement}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +106,9 @@ class PhotoList extends StatelessWidget {
         return ListTile(
           onTap: () {
             increment();
+          },
+          onLongPress: () {
+            decrement();
           },
           leading: CircleAvatar(
             child: Image.network(photos[index].thumbnailUrl),
